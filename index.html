@@ -6,24 +6,47 @@
   <title>QR Safety — TM SYSTEMS</title>
   <style>
     :root{--accent:#005ea6;--muted:#666;--bg:#f7fbff;--card:#fff}
-    html,body{height:100%;margin:0;font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; background:var(--bg);color:#111}
+    html,body{height:100%;margin:0;font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; background:var(--bg);color:#111; line-height:1.5;}
     .wrap{max-width:900px;margin:28px auto;padding:20px}
     header{display:flex;align-items:center;gap:16px}
     header img{height:56px;width:auto;border-radius:6px}
-    header h1{font-size:20px;margin:0}
+    header h1{font-size:clamp(18px, 4vw, 20px);margin:0}
     .lead{background:var(--card);padding:18px;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,0.06)}
     .tag{display:inline-block;background:var(--accent);color:#fff;padding:6px 10px;border-radius:999px;font-weight:600;font-size:12px}
-    h2{color:var(--accent);font-size:16px;margin:18px 0 8px}
-    ul{margin:8px 0 16px 18px}
+    h2{color:var(--accent);font-size:clamp(14px, 3.5vw, 16px);margin:18px 0 8px}
+    ul{margin:8px 0 16px 18px; padding-left:0;}
+    ul li{margin-bottom:8px;}
     .dos, .donts{display:flex;gap:16px}
-    .card{background:var(--card);padding:14px;border-radius:10px;flex:1;box-shadow:0 6px 18px rgba(0,0,0,0.04)}
+    .card{background:var(--card);padding:14px;border-radius:10px;flex:1;box-shadow:0 6px 18px rgba(0,0,0,0.04); min-width:0;} /* min-width:0 prevents flex overflow */
     .small{color:var(--muted);font-size:13px}
-    .report{margin-top:18px;display:flex;gap:12px;align-items:center}
-    .btn{background:var(--accent);color:#fff;padding:10px 14px;border-radius:8px;text-decoration:none;font-weight:600}
+    .report{margin-top:18px;display:flex;gap:12px;align-items:center; flex-wrap:wrap;}
+    .btn{background:var(--accent);color:#fff;padding:12px 16px;border-radius:8px;text-decoration:none;font-weight:600; font-size:16px; /* Larger touch target for mobile */ display:inline-block;}
     footer{margin-top:22px;font-size:13px;color:var(--muted)}
     code{background:#eef4fb;padding:2px 6px;border-radius:6px;font-size:13px}
+    pre{background:#eef4fb;padding:10px;border-radius:8px; white-space: pre-wrap; overflow-x: auto; font-size:14px; line-height:1.4; margin:8px 0;}
     @media print{body{background:#fff} .wrap{box-shadow:none} header img{height:72px} .btn{display:none}}
-    @media (max-width:640px){header{flex-direction:row;align-items:center} .dos, .donts{flex-direction:column}}
+    @media (max-width:640px){
+      .wrap{padding:16px; margin:16px auto;} /* Reduced padding for smaller screens */
+      header{flex-direction:column; align-items:flex-start; gap:12px; text-align:left;}
+      header img{height:48px;} /* Slightly smaller logo on mobile */
+      .lead{padding:16px;}
+      h2{margin:16px 0 6px;}
+      ul{margin-left:16px; margin-bottom:12px;}
+      ul li{margin-bottom:6px; font-size:16px;} /* Ensure base font size for readability */
+      .dos, .donts{flex-direction:column; gap:12px;}
+      .card{padding:12px; min-width:100%;} /* Full width on mobile */
+      .small{font-size:14px;}
+      .btn{padding:14px 18px; font-size:16px;} /* Even larger for easy tapping */
+      pre{padding:12px; font-size:16px;} /* Larger code font on mobile */
+      footer{font-size:14px;}
+    }
+    @media (max-width:400px){ /* Extra tweaks for very small screens */
+      .wrap{padding:12px; margin:12px auto;}
+      header img{height:40px;}
+      h2{font-size:14px;}
+      .card{padding:10px;}
+      pre{font-size:15px; padding:10px;}
+    }
   </style>
 </head>
 <body>
@@ -65,7 +88,7 @@
       </ul>
 
       <h2>Before you scan — quick checklist</h2>
-      <div style="display:flex;gap:14px;flex-wrap:wrap">
+      <div class="dos" style="display:flex;gap:14px;flex-wrap:wrap"> <!-- Added class for targeting -->
         <div class="card" style="min-width:240px">
           <strong>Do</strong>
           <ul>
@@ -88,18 +111,18 @@
       </div>
 
       <h2>If you accidentally scanned a suspicious QR</h2>
-      <ol>
-        <li>Stop interacting with the page/app immediately (do not enter credentials or grant permissions).</li>
-        <li>Disconnect from the network (turn off Wi‑Fi / mobile data) to limit potential data loss or command-and-control access.</li>
-        <li>Run a full device scan with your antivirus/EDR. If your company uses an EDR (e.g., Sophos), notify them to run a check.</li>
-        <li>Change passwords for any accounts you accessed from a different, secure device.</li>
-        <li>Report the incident to IT/Security immediately and include the time, location, and a screenshot of the page you saw.
+      <ol style="margin:8px 0 16px 18px; padding-left:0;">
+        <li style="margin-bottom:8px;">Stop interacting with the page/app immediately (do not enter credentials or grant permissions).</li>
+        <li style="margin-bottom:8px;">Disconnect from the network (turn off Wi‑Fi / mobile data) to limit potential data loss or command-and-control access.</li>
+        <li style="margin-bottom:8px;">Run a full device scan with your antivirus/EDR. If your company uses an EDR (e.g., Sophos), notify them to run a check.</li>
+        <li style="margin-bottom:8px;">Change passwords for any accounts you accessed from a different, secure device.</li>
+        <li style="margin-bottom:8px;">Report the incident to IT/Security immediately and include the time, location, and a screenshot of the page you saw.
            If the QR requested installation, preserve the device and let IT advise next steps.</li>
       </ol>
 
       <h2>How to report a suspicious QR</h2>
       <p class="small"></p>
-      <pre style="background:#eef4fb;padding:10px;border-radius:8px">Subject: Suspected malicious QR code scanned — [DATE] — [LOCATION]
+      <pre>Subject: Suspected malicious QR code scanned — [DATE] — [LOCATION]
 
 Hello IT / Security Team,
 
@@ -112,8 +135,7 @@ Actions taken so far: [e.g., I closed the page, disconnected from Wi-Fi, scanned
 Please advise next steps.
 
 Regards,
-[Your name, department, contact number]
-</pre>
+[Your name, department, contact number]</pre>
 
       <div class="report">
         <a class="btn" href="#" onclick="reportEmail();return false;">Report to IT</a>
