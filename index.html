@@ -5,160 +5,336 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>QR Safety — TM SYSTEMS</title>
   <style>
-    :root{--accent:#005ea6;--muted:#666;--bg:#f7fbff;--card:#fff}
-    html,body{height:100%;margin:0;font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; background:var(--bg);color:#111; line-height:1.5;}
-    .wrap{max-width:900px;margin:28px auto;padding:20px}
-    header{display:flex;align-items:center;gap:16px}
-    header img{height:56px;width:auto;border-radius:6px}
-    header h1{font-size:clamp(18px, 4vw, 20px);margin:0}
-    .lead{background:var(--card);padding:18px;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,0.06)}
-    .tag{display:inline-block;background:var(--accent);color:#fff;padding:6px 10px;border-radius:999px;font-weight:600;font-size:12px}
-    h2{color:var(--accent);font-size:clamp(14px, 3.5vw, 16px);margin:18px 0 8px}
-    ul{margin:8px 0 16px 18px; padding-left:0;}
-    ul li{margin-bottom:8px;}
-    .dos, .donts{display:flex;gap:16px}
-    .card{background:var(--card);padding:14px;border-radius:10px;flex:1;box-shadow:0 6px 18px rgba(0,0,0,0.04); min-width:0;} /* min-width:0 prevents flex overflow */
-    .small{color:var(--muted);font-size:13px}
-    .report{margin-top:18px;display:flex;gap:12px;align-items:center; flex-wrap:wrap;}
-    .btn{background:var(--accent);color:#fff;padding:12px 16px;border-radius:8px;text-decoration:none;font-weight:600; font-size:16px; /* Larger touch target for mobile */ display:inline-block;}
-    footer{margin-top:22px;font-size:13px;color:var(--muted)}
-    code{background:#eef4fb;padding:2px 6px;border-radius:6px;font-size:13px}
-    pre{background:#eef4fb;padding:10px;border-radius:8px; white-space: pre-wrap; overflow-x: auto; font-size:14px; line-height:1.4; margin:8px 0;}
-    @media print{body{background:#fff} .wrap{box-shadow:none} header img{height:72px} .btn{display:none}}
-    @media (max-width:640px){
-      .wrap{padding:16px; margin:16px auto;} /* Reduced padding for smaller screens */
-      header{flex-direction:column; align-items:flex-start; gap:12px; text-align:left;}
-      header img{height:48px;} /* Slightly smaller logo on mobile */
-      .lead{padding:16px;}
-      h2{margin:16px 0 6px;}
-      ul{margin-left:16px; margin-bottom:12px;}
-      ul li{margin-bottom:6px; font-size:16px;} /* Ensure base font size for readability */
-      .dos, .donts{flex-direction:column; gap:12px;}
-      .card{padding:12px; min-width:100%;} /* Full width on mobile */
-      .small{font-size:14px;}
-      .btn{padding:14px 18px; font-size:16px;} /* Even larger for easy tapping */
-      pre{padding:12px; font-size:16px;} /* Larger code font on mobile */
-      footer{font-size:14px;}
+    :root{
+      --accent:#005ea6;
+      --muted:#666;
+      --bg:#f7fbff;
+      --card:#fff;
+      --border:#ccc;
     }
-    @media (max-width:400px){ /* Extra tweaks for very small screens */
-      .wrap{padding:12px; margin:12px auto;}
-      header img{height:40px;}
-      h2{font-size:14px;}
-      .card{padding:10px;}
-      pre{font-size:15px; padding:10px;}
+
+    html,body{
+      height:100%;
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial;
+      background: var(--bg);
+      color:#111;
+      scroll-behavior:smooth;
     }
+
+    .wrap{
+      max-width:900px;
+      margin:28px auto;
+      padding:20px;
+      background: var(--card);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+
+    header{
+      display:flex;
+      align-items:center;
+      gap:16px;
+    }
+
+    header img{
+      height:56px;
+      width:auto;
+      border-radius:6px;
+    }
+
+    header h1{
+      font-size:20px;
+      margin:0;
+    }
+
+    .tag{
+      display:inline-block;
+      background:var(--accent);
+      color:#fff;
+      padding:6px 10px;
+      border-radius:999px;
+      font-weight:600;
+      font-size:12px;
+    }
+
+    h2{
+      color:var(--accent);
+      font-size:16px;
+      margin:18px 0 8px;
+      text-align:center;
+    }
+
+    .cards{
+      display:flex;
+      gap:16px;
+      flex-wrap:wrap;
+      justify-content:center;
+      margin:16px 0;
+    }
+
+    .card{
+      background:var(--card);
+      padding:14px;
+      border-radius:10px;
+      flex:1;
+      min-width:140px;
+      max-width:200px;
+      text-align:center;
+      box-shadow:0 6px 18px rgba(0,0,0,0.04);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      opacity:0;
+      transform: translateY(30px);
+    }
+
+    .card img{
+      height:64px;
+      width:auto;
+      margin-bottom:8px;
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover{
+      transform: scale(1.05);
+      box-shadow:0 12px 24px rgba(0,0,0,0.25);
+    }
+
+    .card.fade-in{
+      opacity:1;
+      transform: translateY(0);
+    }
+
+    .dos-donts{
+      display:flex;
+      gap:16px;
+      flex-wrap:wrap;
+      margin-top:20px;
+      justify-content:center;
+    }
+
+    .dos-donts .card{
+      text-align:center;
+      max-width:180px;
+    }
+
+    .small{
+      color:var(--muted);
+      font-size:13px;
+      text-align:center;
+    }
+
+    .report{
+      margin-top:18px;
+      display:flex;
+      gap:12px;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .btn{
+      background:var(--accent);
+      color:#fff;
+      padding:10px 14px;
+      border-radius:8px;
+      text-decoration:none;
+      font-weight:600;
+      transition: background 0.3s ease;
+    }
+
+    .btn:hover{
+      background:#00457a;
+    }
+
+    footer{
+      margin-top:22px;
+      font-size:13px;
+      color:var(--muted);
+      text-align:center;
+    }
+
+    @media(max-width:640px){
+      header{flex-direction:row;align-items:center}
+      .dos-donts{flex-direction:column}
+    }
+
+    /* === Popup Styles === */
+    .popup{
+      position:fixed;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      background:rgba(0,0,0,0.6);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      visibility:hidden;
+      opacity:0;
+      transition:opacity 0.3s ease;
+      z-index:9999;
+      padding:20px;
+    }
+
+    .popup.active{
+      visibility:visible;
+      opacity:1;
+    }
+
+    .popup-box{
+      background:#fff;
+      padding:20px;
+      border-radius:12px;
+      width:90vw;
+      max-width:360px;
+      text-align:center;
+      box-shadow:0 6px 20px rgba(0,0,0,0.25);
+      animation:pop 0.4s ease;
+    }
+
+    .popup-box h2{
+      margin-top:0;
+      color:#d32f2f;
+      font-size:1.2rem;
+    }
+
+    .popup-box p{
+      font-size:0.95rem;
+      color:#333;
+    }
+
+    .popup-box button{
+      margin-top:14px;
+      padding:10px 18px;
+      border:none;
+      border-radius:6px;
+      background:#005ea6;
+      color:#fff;
+      font-weight:600;
+      cursor:pointer;
+      font-size:1rem;
+    }
+
+    .popup-box button:hover{
+      background:#00457a;
+    }
+
+    @keyframes pop{
+      0%{transform:scale(0.8);opacity:0.5}
+      100%{transform:scale(1);opacity:1}
+    }
+
+    /* Glow effect for attention */
+    @keyframes glow {
+      0%{ box-shadow:0 0 0 rgba(0,94,166,0.5); }
+      50%{ box-shadow:0 0 15px rgba(0,94,166,0.8); }
+      100%{ box-shadow:0 0 0 rgba(0,94,166,0.5); }
+    }
+    .glow{
+      animation: glow 1.5s ease-in-out infinite;
+    }
+
   </style>
 </head>
 <body>
   <div class="wrap">
     <header>
-      <!-- Replace src with your logo path or URL -->
-      <img src="Logo.jpg" alt="TM SYSTEMS logo" onerror="this.style.display='none'" />
+      <img src="Logo.jpg" alt="TM Systems logo" onerror="this.style.display='none'" />
       <div>
-        <div class="tag">TM SYSTEMS</div>
-        <h1>Think Before You Scan — QR Safety Guidance</h1>
-        <div class="small">Short, clear steps to stay safe when scanning QR codes on company premises.</div>
+        <div class="tag">TM Systems</div>
+        <h1>Think Before You Scan</h1>
+        <div class="small">Stay alert — Scammers use fake QR codes.</div>
       </div>
     </header>
 
     <section class="lead">
-      <p style="margin:0 0 10px"><strong>Quick summary:</strong> QR codes are convenient but can be abused. Scanning an unknown or tampered QR may lead to phishing, malware, unwanted network connections or financial fraud. If you're not 100% sure who placed it — don't scan.</p>
-
-      <h2>Why QR codes can be risky</h2>
-      <ul>
-        <li><strong>Phishing & credential theft:</strong> QR can redirect to fake login pages that capture usernames and passwords.</li>
-        <li><strong>Malware / malicious downloads:</strong> QR may point to software (APK) or exploit pages that try to install malware on your phone or device.</li>
-        <li><strong>Auto-actions:</strong> Some QR payloads can trigger immediate actions — connect to Wi‑Fi, send email/SMS, start a call, or add calendar events.</li>
-        <li><strong>Fraud & payments:</strong> QR can redirect you to fake payment pages or initiate transactions.</li>
-        <li><strong>Tracking & data leakage:</strong> Opening links can leak device identifiers, location, or internal network info.</li>
-        <li><strong>Sticker overlay attacks:</strong> Attackers place malicious QR stickers over legitimate codes (e.g., posters, menus).</li>
-      </ul>
-
-      <h2>Real-world example</h2>
-      <ul>
-        <li>A poster in a public area was over-stickered with a malicious QR. Employees who scanned were sent to a fake SSO page and entered credentials, enabling account takeover.</li>
-      </ul>
-
-      <h2>How to spot a suspicious QR</h2>
-      <ul>
-        <li>Unexpected placement (a new sticker over an old poster, handwritten codes, or codes placed in unusual locations).</li>
-        <li>Shortened or odd-looking URLs in the preview (e.g., <code>bit.ly/...</code> with no context).</li>
-        <li>Poor-quality printing, misaligned stickers, or codes without brand context on official-looking signage.</li>
-        <li>Offers that seem too good to be true (free gifts, instant refunds, prize claims).</li>
-      </ul>
-
-      <h2>Before you scan — quick checklist</h2>
-      <div class="dos" style="display:flex;gap:14px;flex-wrap:wrap"> <!-- Added class for targeting -->
-        <div class="card" style="min-width:240px">
-          <strong>Do</strong>
-          <ul>
-            <li>Verify the source: did Facilities, HR, or IT approve this sign?</li>
-            <li>Preview the link — use your camera or scanner that shows the full URL before opening.</li>
-            <li>If unsure, ask a colleague or contact IT before scanning.</li>
-            <li>Keep your device OS and security apps updated.</li>
-          </ul>
+      <h2 class="glow">⚠️ Why QR Codes Can Be Risky</h2>
+      <div class="cards">
+        <div class="card">
+          <img src="phishing.png" alt="Phishing">
+          <p><strong>Phishing</strong><br>Fake pages steal passwords.</p>
         </div>
-
-        <div class="card" style="min-width:240px">
-          <strong>Don't</strong>
-          <ul>
-            <li>Don't install apps or device profiles prompted by a QR unless from a trusted source.</li>
-            <li>Don't connect to unknown Wi‑Fi networks offered via QR codes.</li>
-            <li>Don't enter usernames, passwords or payment details on pages you didn't explicitly verify.</li>
-            <li>Don't assume a QR is safe because it was placed in a public area.</li>
-          </ul>
+        <div class="card">
+          <img src="malware.png" alt="Malware">
+          <p><strong>Malware</strong><br>Hidden apps infect phones.</p>
+        </div>
+        <div class="card">
+          <img src="fraud.png" alt="Fraud">
+          <p><strong>Fraud</strong><br>Fake payments & scams.</p>
         </div>
       </div>
 
-      <h2>If you accidentally scanned a suspicious QR</h2>
-      <ol style="margin:8px 0 16px 18px; padding-left:0;">
-        <li style="margin-bottom:8px;">Stop interacting with the page/app immediately (do not enter credentials or grant permissions).</li>
-        <li style="margin-bottom:8px;">Disconnect from the network (turn off Wi‑Fi / mobile data) to limit potential data loss or command-and-control access.</li>
-        <li style="margin-bottom:8px;">Run a full device scan with your antivirus/EDR. If your company uses an EDR (e.g., Sophos), notify them to run a check.</li>
-        <li style="margin-bottom:8px;">Change passwords for any accounts you accessed from a different, secure device.</li>
-        <li style="margin-bottom:8px;">Report the incident to IT/Security immediately and include the time, location, and a screenshot of the page you saw.
-           If the QR requested installation, preserve the device and let IT advise next steps.</li>
-      </ol>
-
-      <h2>How to report a suspicious QR</h2>
-      <p class="small"></p>
-      <pre>Subject: Suspected malicious QR code scanned — [DATE] — [LOCATION]
-
-Hello IT / Security Team,
-
-I scanned a QR code at the following location: [BUILDING / FLOOR / NEAREST SIGNAGE].
-Time (local): [HH:MM, DD-MMM-YYYY].
-Device: [Android / iPhone / Windows / Mac — include model].
-URL shown when scanned: [paste or screenshot].
-Actions taken so far: [e.g., I closed the page, disconnected from Wi-Fi, scanned with antivirus].
-
-Please advise next steps.
-
-Regards,
-[Your name, department, contact number]</pre>
+      <h2>✔️ Do’s & Don’ts</h2>
+      <div class="dos-donts">
+        <div class="card">
+          <img src="QR-2.png" alt="Do" style="max-width:100%;height:auto">
+        </div>
+        <div class="card">
+          <img src="QR-1.png" alt="Don't" style="max-width:100%;height:auto">
+        </div>
+      </div>
 
       <div class="report">
-        <a class="btn" href="#" onclick="reportEmail();return false;">Report to IT</a>
+        <a class="btn" href="#" onclick="reportEmail();return false;">📧 Report to IT</a>
       </div>
 
-      <script>
-        function reportEmail(){
-          var it = 'contact@tmspl.com'; // REPLACE
-          var subject = encodeURIComponent('Suspected malicious QR code scanned - ' + new Date().toLocaleString());
-          var body = encodeURIComponent('Hello IT / Security Team,%0D%0A%0D%0AI scanned a QR code at: [LOCATION].%0D%0ATime: ' + new Date().toLocaleString() + '%0D%0ADevice: [DEVICE].%0D%0AURL shown: [PASTE URL OR ATTACH SCREENSHOT].%0D%0A%0D%0AActions taken: [DETAILS].%0D%0A%0D%0APlease advise next steps.%0D%0A%0D%0ARegards,%0D%0A[YOUR NAME]');
-          window.location.href = 'mailto:' + it + '?subject=' + subject + '&body=' + body;
-        }
-      </script>
-
-      <h2>Company policy</h2>
-      <p class="small">Only scan QR codes that are published by TM SYSTEMS channels or clearly marked and approved by Facilities / HR / IT. If you see a new code in a shared area, confirm its origin before scanning.</p>
-
+      <h2>🏢 Company Policy</h2>
+      <p class="small">Only scan QR codes approved by TM Systems or placed by Facilities/HR/IT. If in doubt, confirm before scanning.</p>
     </section>
 
     <footer>
-      <div>Questions? Contact IT: <code>contact@tmspl.com</code> • Phone: <code>+91-1234569874</code></div>
-      <div style="margin-top:8px;color:var(--muted)">© <strong>TM SYSTEMS</strong></div>
+      <div>Questions? Contact IT: <code>contact@tmspl.com</code></div>
+      <div style="margin-top:8px">© <strong>TM SYSTEMS</strong></div>
     </footer>
   </div>
+
+  <!-- === Awareness Popups === -->
+  <div id="popup1" class="popup">
+    <div class="popup-box shake">
+      <h2>⚠️ You just got scammed!!</h2>
+      <p>This is how attackers trick you.</p>
+      <button onclick="nextPopup()">Close</button>
+    </div>
+  </div>
+
+  <div id="popup2" class="popup">
+    <div class="popup-box">
+      <h2>Not Really 😅</h2>
+      <p>But it could happen.<br><br>Scammers use fake QR codes.<br><strong>Don’t scan if you don’t trust it.</strong></p>
+      <button onclick="closePopups()">Got it</button>
+    </div>
+  </div>
+
+  <script>
+    // Popups
+    window.onload=function(){
+      setTimeout(function(){document.getElementById("popup1").classList.add("active");},1500);
+
+      // Scroll animation for cards
+      const cards = document.querySelectorAll('.card');
+      const observer = new IntersectionObserver(entries=>{
+        entries.forEach(entry=>{
+          if(entry.isIntersecting){
+            entry.target.classList.add('fade-in');
+          }
+        });
+      },{threshold:0.3});
+      cards.forEach(card=>observer.observe(card));
+    };
+
+    function nextPopup(){
+      document.getElementById("popup1").classList.remove("active");
+      setTimeout(function(){document.getElementById("popup2").classList.add("active");},400);
+    }
+
+    function closePopups(){document.getElementById("popup2").classList.remove("active");}
+
+    function reportEmail(){
+      var it='contact@tmspl.com';
+      var subject=encodeURIComponent('Suspected malicious QR code - '+new Date().toLocaleString());
+      var body=encodeURIComponent('Hello IT,%0D%0A%0D%0AI scanned a QR code.%0D%0ADevice: [DEVICE].%0D%0AURL shown: [PASTE URL].%0D%0A%0D%0ARegards,%0D%0A[Your Name]');
+      window.location.href='mailto:'+it+'?subject='+subject+'&body='+body;
+    }
+  </script>
 </body>
 </html>
